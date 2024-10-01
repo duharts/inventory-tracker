@@ -26,6 +26,47 @@ display_logo()
 
 
 # -----------------------------------------------------------------------------
+# Reconnect to the database
+conn = sqlite3.connect(db_path)
+cursor = conn.cursor()
+
+# Step 1: Create a new table without the 'cost_price' column
+cursor.execute('''
+    CREATE TABLE inventory_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        item_name TEXT,
+        units_sold INTEGER,
+        units_left INTEGER,
+        reorder_point INTEGER,
+        description TEXT
+    )
+''')
+
+# Step 2: Copy data from the old 'inventory' table to the new 'inventory_new' table (excluding the 'cost_price' column)
+cursor.execute('''
+    INSERT INTO inventory_new (id, item_name, units_sold, units_left, reorder_point, description)
+    SELECT id, item_name, units_sold, units_left, reorder_point, description
+    FROM inventory
+''')
+
+# Step 3: Drop the old 'inventory' table
+cursor.execute('DROP TABLE inventory')
+
+# Step 4: Rename the new table to 'inventory'
+cursor.execute('ALTER TABLE inventory_new RENAME TO inventory')
+
+# Commit the changes
+conn.commit()
+
+# Verify the new schema
+cursor.execute("PRAGMA table_info(inventory);")
+updated_schema = cursor.fetchall()
+
+# Close the connection
+conn.close()
+
+updated_schema
+
 # Declare some useful functions.
 
 
