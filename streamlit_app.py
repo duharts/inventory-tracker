@@ -9,7 +9,7 @@ import pandas as pd
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
-    page_title="Pantry Inventory tracker",
+    page_title="Inventory tracker",
     page_icon=":shopping_bags:",  # This is an emoji shortcode. Could be a URL too.
 )
 
@@ -39,8 +39,10 @@ def initialize_data(conn):
         CREATE TABLE IF NOT EXISTS inventory (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             item_name TEXT,
+            price REAL,
             units_sold INTEGER,
             units_left INTEGER,
+            cost_price REAL,
             reorder_point INTEGER,
             description TEXT
         )
