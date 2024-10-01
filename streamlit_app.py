@@ -17,7 +17,6 @@ def display_logo():
 # Display logo at the top of the app
 display_logo()
 
-
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
     page_title="Inventory tracker",
