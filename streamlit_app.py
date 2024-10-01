@@ -39,10 +39,10 @@ def initialize_data(conn):
         CREATE TABLE IF NOT EXISTS inventory (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             item_name TEXT,
-            price REAL,
+             REAL,
             units_sold INTEGER,
             units_left INTEGER,
-            cost_price REAL,
+            cost_ REAL,
             reorder_point INTEGER,
             description TEXT
         )
@@ -52,7 +52,7 @@ def initialize_data(conn):
     cursor.execute(
         """
         INSERT INTO inventory
-            (item_name, price, units_sold, units_left, cost_price, reorder_point, description)
+            (item_name, , units_sold, units_left, cost_, reorder_point, description)
         VALUES
             -- Beverages
             ('Bottled Water (500ml)', 1.50, 115, 15, 0.80, 16, 'Hydrating bottled water'),
@@ -105,10 +105,10 @@ def load_data(conn):
         columns=[
             "id",
             "item_name",
-            "price",
+            "",
             "units_sold",
             "units_left",
-            "cost_price",
+            "cost_",
             "reorder_point",
             "description",
         ],
@@ -135,10 +135,10 @@ def update_data(conn, df, changes):
             UPDATE inventory
             SET
                 item_name = :item_name,
-                price = :price,
+                 = :,
                 units_sold = :units_sold,
                 units_left = :units_left,
-                cost_price = :cost_price,
+                cost_ = :cost_,
                 reorder_point = :reorder_point,
                 description = :description
             WHERE id = :id
@@ -150,9 +150,9 @@ def update_data(conn, df, changes):
         cursor.executemany(
             """
             INSERT INTO inventory
-                (id, item_name, price, units_sold, units_left, cost_price, reorder_point, description)
+                (id, item_name, , units_sold, units_left, cost_, reorder_point, description)
             VALUES
-                (:id, :item_name, :price, :units_sold, :units_left, :cost_price, :reorder_point, :description)
+                (:id, :item_name, :, :units_sold, :units_left, :cost_, :reorder_point, :description)
             """,
             (defaultdict(lambda: None, row) for row in changes["added_rows"]),
         )
@@ -201,9 +201,9 @@ edited_df = st.data_editor(
     disabled=["id"],  # Don't allow editing the 'id' column.
     num_rows="dynamic",  # Allow appending/deleting rows.
     column_config={
-        # Show dollar sign before price columns.
-        "price": st.column_config.NumberColumn(format="$%.2f"),
-        "cost_price": st.column_config.NumberColumn(format="$%.2f"),
+        # Show dollar sign before  columns.
+        "": st.column_config.NumberColumn(format="$%.2f"),
+        "cost_": st.column_config.NumberColumn(format="$%.2f"),
     },
     key="inventory_table",
 )
