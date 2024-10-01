@@ -17,12 +17,6 @@ def display_logo():
 # Display logo at the top of the app
 display_logo()
 
-# Set the title and favicon that appear in the Browser's tab bar.
-st.set_page_config(
-    page_title="Inventory tracker",
-    page_icon=":shopping_bags:",  # This is an emoji shortcode. Could be a URL too.
-)
-
 
 # -----------------------------------------------------------------------------
 # Declare some useful functions.
