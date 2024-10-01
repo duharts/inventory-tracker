@@ -26,51 +26,6 @@ display_logo()
 
 
 # -----------------------------------------------------------------------------
-# Reconnect to the database
-conn = sqlite3.connect(db_path)
-cursor = conn.cursor()
-
-# Step 1: Create a new table without the 'cost_price' column
-cursor.execute('''
-    CREATE TABLE inventory_new (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        item_name TEXT,
-        units_sold INTEGER,
-        units_left INTEGER,
-        reorder_point INTEGER,
-        description TEXT
-    )
-''')
-
-import sqlite3
-import streamlit as st
-from pathlib import Path
-
-# Define the path to your SQLite database
-db_path = Path(__file__).parent / 'inventory.db'
-
-# Connect to the database
-conn = sqlite3.connect(db_path)
-
-# Function to sell an item
-def sell_item(conn, item_name, units_sold):
-    cursor = conn.cursor()
-    cursor.execute('''
-        UPDATE inventory
-        SET units_left = units_left - ?
-        WHERE item_name = ?
-    ''', (units_sold, item_name))
-    conn.commit()
-
-# Streamlit UI to sell an item
-st.title("Sell an Item")
-item_name = st.selectbox("Select Item", ["Rice", "Pasta", "Cereal", "Beans"])  # Populate with your actual item names
-units_sold = st.number_input("Units Sold", min_value=0)
-
-if st.button("Sell Item"):
-    sell_item(conn, item_name, units_sold)
-    st.success(f"Sold {units_sold} units of {item_name}!")
-
 # Declare some useful functions.
 
 
