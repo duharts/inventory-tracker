@@ -6,6 +6,17 @@ import streamlit as st
 import altair as alt
 import pandas as pd
 
+# Set page config (remove the favicon, as we're using a logo instead)
+st.set_page_config(page_title="Inventory Tracker")
+
+# Function to display the logo
+def display_logo():
+    logo_url = "https://static.wixstatic.com/media/d4630a_9a5963acab8c44b48e058ec36dcaa4e6~mv2.png"
+    st.image(logo_url, width=200)
+
+# Display logo at the top of the app
+display_logo()
+
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
