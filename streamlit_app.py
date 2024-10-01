@@ -42,30 +42,34 @@ cursor.execute('''
     )
 ''')
 
-# Step 2: Copy data from the old 'inventory' table to the new 'inventory_new' table (excluding the 'cost_price' column)
-cursor.execute('''
-    INSERT INTO inventory_new (id, item_name, units_sold, units_left, reorder_point, description)
-    SELECT id, item_name, units_sold, units_left, reorder_point, description
-    FROM inventory
-''')
+import sqlite3
+import streamlit as st
+from pathlib import Path
 
-# Step 3: Drop the old 'inventory' table
-cursor.execute('DROP TABLE inventory')
+# Define the path to your SQLite database
+db_path = Path(__file__).parent / 'inventory.db'
 
-# Step 4: Rename the new table to 'inventory'
-cursor.execute('ALTER TABLE inventory_new RENAME TO inventory')
+# Connect to the database
+conn = sqlite3.connect(db_path)
 
-# Commit the changes
-conn.commit()
+# Function to sell an item
+def sell_item(conn, item_name, units_sold):
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE inventory
+        SET units_left = units_left - ?
+        WHERE item_name = ?
+    ''', (units_sold, item_name))
+    conn.commit()
 
-# Verify the new schema
-cursor.execute("PRAGMA table_info(inventory);")
-updated_schema = cursor.fetchall()
+# Streamlit UI to sell an item
+st.title("Sell an Item")
+item_name = st.selectbox("Select Item", ["Rice", "Pasta", "Cereal", "Beans"])  # Populate with your actual item names
+units_sold = st.number_input("Units Sold", min_value=0)
 
-# Close the connection
-conn.close()
-
-updated_schema
+if st.button("Sell Item"):
+    sell_item(conn, item_name, units_sold)
+    st.success(f"Sold {units_sold} units of {item_name}!")
 
 # Declare some useful functions.
 
