@@ -5,43 +5,43 @@ from datetime import datetime
 # Title for the app
 st.title("Food Pantry Inventory Tracker")
 
-# Create an example DataFrame
+# Create an example DataFrame for Food Pantry
 if 'inventory' not in st.session_state:
-    st.session_state['inventory'] = pd.DataFrame(columns=['Item Name', 'Category', 'Quantity', 'Received Date', 'Expiration Date'])
+    st.session_state['inventory'] = pd.DataFrame(columns=['Food Item', 'Category', 'Quantity', 'Received Date', 'Expiration Date'])
 
 # Categories for food items
-categories = ['Non-perishable', 'Perishable', 'Beverage', 'Snack', 'Other']
+categories = ['Canned Goods', 'Dry Goods', 'Fresh Produce', 'Frozen Foods', 'Beverages']
 
-# Form to add new items to the inventory
-with st.form(key='add_item'):
-    item_name = st.text_input('Item Name')
+# Form to add new food items to the pantry inventory
+with st.form(key='add_food_item'):
+    food_item = st.text_input('Food Item Name')
     category = st.selectbox('Category', categories)
-    quantity = st.number_input('Quantity', min_value=1)
+    quantity = st.number_input('Quantity (in units)', min_value=1)
     received_date = st.date_input('Received Date', value=datetime.today())
     expiration_date = st.date_input('Expiration Date', value=datetime.today())
 
-    submit_button = st.form_submit_button(label='Add Item')
+    submit_button = st.form_submit_button(label='Add Food Item')
 
     if submit_button:
-        new_item = {
-            'Item Name': item_name,
+        new_food_item = {
+            'Food Item': food_item,
             'Category': category,
             'Quantity': quantity,
             'Received Date': received_date,
             'Expiration Date': expiration_date
         }
-        st.session_state['inventory'] = st.session_state['inventory'].append(new_item, ignore_index=True)
-        st.success(f'Added {quantity} units of {item_name} to the inventory.')
+        st.session_state['inventory'] = st.session_state['inventory'].append(new_food_item, ignore_index=True)
+        st.success(f'Added {quantity} units of {food_item} to the inventory.')
 
-# Display the current inventory
-st.subheader('Current Inventory')
+# Display the current pantry inventory
+st.subheader('Current Pantry Inventory')
 st.write(st.session_state['inventory'])
 
 # Search functionality
 st.subheader('Search Inventory')
-search_term = st.text_input('Search by Item Name')
+search_term = st.text_input('Search by Food Item Name')
 if search_term:
-    filtered_inventory = st.session_state['inventory'][st.session_state['inventory']['Item Name'].str.contains(search_term, case=False)]
+    filtered_inventory = st.session_state['inventory'][st.session_state['inventory']['Food Item'].str.contains(search_term, case=False)]
     st.write(filtered_inventory)
 
 # Function to remove expired items
@@ -62,9 +62,8 @@ else:
 # Option to download inventory as CSV
 st.subheader('Download Inventory')
 st.download_button(
-    label="Download inventory as CSV",
+    label="Download pantry inventory as CSV",
     data=st.session_state['inventory'].to_csv(index=False),
     file_name='food_pantry_inventory.csv',
     mime='text/csv',
 )
-
