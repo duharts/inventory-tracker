@@ -39,10 +39,8 @@ def initialize_data(conn):
         CREATE TABLE IF NOT EXISTS inventory (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             item_name TEXT,
-            price REAL,
             units_sold INTEGER,
             units_left INTEGER,
-            cost_price REAL,
             reorder_point INTEGER,
             description TEXT
         )
