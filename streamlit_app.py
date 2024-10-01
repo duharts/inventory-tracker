@@ -171,9 +171,9 @@ def update_data(conn, df, changes):
 
 # Set the title that appears at the top of the page.
 """
-# :shopping_bags: Inventory tracker
+# :shopping_bags: Lighthouse Inventory tracker
 
-**Welcome to Alice's Corner Store's intentory tracker!**
+**Welcome to Lighthouse Internal Pantry intentory tracker!**
 This page reads and writes directly from/to our inventory database.
 """
 
