@@ -6,6 +6,32 @@ import streamlit as st
 import altair as alt
 import pandas as pd
 
+import sqlite3
+import streamlit as st
+
+# Connect to the database
+conn = sqlite3.connect('inventory.db')
+
+# Function to sell an item
+def sell_item(conn, item_name, units_sold):
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE inventory
+        SET units_left = units_left - ?
+        WHERE item_name = ?
+    ''', (units_sold, item_name))
+    conn.commit()
+
+# Streamlit UI to sell an item
+st.title("Sell an Item")
+item_name = st.selectbox("Select Item", ["Rice", "Pasta", "Cereal", "Beans"])  # Populate with your actual item names
+units_sold = st.number_input("Units Sold", min_value=0)
+
+if st.button("Sell Item"):
+    sell_item(conn, item_name, units_sold)
+    st.success(f"Sold {units_sold} units of {item_name}!")
+
+
 # Set page config (remove the favicon, as we're using a logo instead)
 st.set_page_config(page_title="Inventory Tracker")
 
